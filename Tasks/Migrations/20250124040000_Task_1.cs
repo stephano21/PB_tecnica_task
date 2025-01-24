@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Tasks.Migrations
 {
     /// <inheritdoc />
-    public partial class task_01 : Migration
+    public partial class Task_1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -208,16 +208,19 @@ namespace Tasks.Migrations
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreateUser = table.Column<string>(type: "text", nullable: false),
                     CreateIP = table.Column<string>(type: "text", nullable: false),
                     UpdateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdateUser = table.Column<string>(type: "text", nullable: false),
-                    UpdateIP = table.Column<string>(type: "text", nullable: false),
+                    UpdateUser = table.Column<string>(type: "text", nullable: true),
+                    UpdateIP = table.Column<string>(type: "text", nullable: true),
                     DeleteAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    DeleteUser = table.Column<string>(type: "text", nullable: false),
-                    DeleteIP = table.Column<string>(type: "text", nullable: false)
+                    DeleteUser = table.Column<string>(type: "text", nullable: true),
+                    DeleteIP = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

@@ -22,15 +22,19 @@ namespace Tasks.Manager
         /// Get All task create by own 
         /// </summary>
         /// <returns>List of Task of type  TaskDTO' </returns>
-        public async Task<List<TaskDTO>> Get() => await _context.TaskNotes.Where(x => x.Active &&  x.UserId.Equals(_IdUser)).Select(x => new TaskDTO
+        public async Task<List<ItemTaskDTO>> Get() => await _context.TaskNotes.Where(x => x.Active && x.UserId.Equals(_IdUser)).Select(x => new ItemTaskDTO
         {
             Id = x.Id,
             Title = x.Title,
             Description = x.Description,
+            status = x.Status,
+            CreateDate = x.CreateAt,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
             UserId = x.UserId
         }).ToListAsync();
 
-        public async Task<bool> Save(TaskDTO data)
+        public async Task<bool> Save(CreateTask data)
         {
             data.Title = data.Title.Trim();
             var ExisteTitle = await _context.TaskNotes.Where(x => x.Active && x.Title.ToLower() == data.Title.ToLower()).AnyAsync();
@@ -44,12 +48,12 @@ namespace Tasks.Manager
                 Description = data.Description,
                 UserId = _IdUser.ToString(),
             };
-            nuevo.Register(_User,_Ip);
+            nuevo.Register(_User, _Ip);
             await _context.TaskNotes.AddAsync(nuevo);
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> Edit(TaskDTO data)
+        public async Task<bool> Edit(ItemTaskDTO data)
         {
             var duplicate = await _context.TaskNotes.Where(x => x.Active && x.Title.ToLower() == data.Title.ToLower() && x.Id != data.Id).AnyAsync();
             if (duplicate)
@@ -67,6 +71,28 @@ namespace Tasks.Manager
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> HandleStatus(long Id, bool start = true)
+        {
+            var Existe = await _context.TaskNotes.Where(x => x.Id == Id).FirstOrDefaultAsync();
+            if (Existe == null)
+            {
+                throw new Exception("No existe el registro");
+            }
+            if (start && Existe.Status <= Status.EnProceso) throw new Exception("Tarea ya iniciada");
+            if (!start && Existe.Status <= Status.Terminado) throw new Exception("Tarea ya finalizada");
+            Existe.Status = start ? Status.EnProceso : Status.Terminado;
+            if (start)
+            {
+                Existe.StartDate = DateTime.UtcNow;
+
+            }
+            else
+            {
+                Existe.EndDate = DateTime.UtcNow;
+            }
+            await _context.SaveChangesAsync();
+            return true;
+        }
         public async Task<bool> Delete(long Id)
         {
             var Existe = await _context.TaskNotes.Where(x => x.Id == Id).FirstOrDefaultAsync();
@@ -74,7 +100,7 @@ namespace Tasks.Manager
             {
                 throw new Exception("No existe el registro");
             }
-            Existe.Inactive(_User,_Ip);
+            Existe.Inactive(_User, _Ip);
             //_context.TaskNotes.Remove(Existe);
             await _context.SaveChangesAsync();
             return true;

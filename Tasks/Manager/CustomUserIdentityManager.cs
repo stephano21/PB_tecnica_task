@@ -99,7 +99,7 @@ namespace Tasks.Manager
 
             var usuario = await FindByNameAsync(credencialesUsuario.Username);
             if (usuario is null) throw new Exception("Usuario no encontrado!");
-            if (usuario != null && !usuario.LockoutEnabled)
+            if (usuario != null && !usuario.LockoutEnd.HasValue)
             {
                
                 var resultado = await signInManager.PasswordSignInAsync(credencialesUsuario.Username, credencialesUsuario.Password, isPersistent: false, lockoutOnFailure: true);

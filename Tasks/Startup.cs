@@ -70,7 +70,7 @@ namespace Tasks
             services.AddScoped<IdentityDbContext<CustomUserIdentity>, ApplicationDbContext>();
             services.AddIdentity<CustomUserIdentity, IdentityRole>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = true;
+                options.SignIn.RequireConfirmedAccount = false;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -89,14 +89,14 @@ namespace Tasks
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "JAZZ API",
+                    Title = "TASK API",
                     Version = "v1",
                     Description = "API RESTful For the App",
                     Contact = new OpenApiContact
                     {
-                        Email = "soporte@jazz.com",
-                        Name = "Jazz Soft",
-                        Url = new Uri("https://jazz.com")
+                        Email = "stephanochang21@gmail.com",
+                        Name = "Stephano chang",
+                        Url = new Uri("https://github.com/stephano21")
                     },
                 });
 

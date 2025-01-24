@@ -265,16 +265,23 @@ namespace Tasks.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteIP")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("DeleteUser")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -284,11 +291,9 @@ namespace Tasks.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UpdateIP")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("UpdateUser")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("UserId")

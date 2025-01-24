@@ -28,11 +28,15 @@ namespace Tasks.Controllers
         [HttpGet("Task")]
         public async Task<ActionResult> IndexAsync() => Ok(await _manager.Get());
         [HttpPost("Task")]
-        public async Task<ActionResult> SaveAsync([FromBody] TaskDTO data) => Ok(await _manager.Save(data));
+        public async Task<ActionResult> SaveAsync([FromBody] CreateTask data) => Ok(await _manager.Save(data));
         [HttpPut("Task")]
-        public async Task<ActionResult> EditAsync(TaskDTO data) => Ok(await _manager.Edit(data));
+        public async Task<ActionResult> EditAsync(ItemTaskDTO data) => Ok(await _manager.Edit(data));
         [HttpDelete("Task/{Id:long}")]
         public async Task<ActionResult> DeleteAsync(long Id) => Ok(await _manager.Delete(Id));
+        [HttpPost("Task/start/{Id:long}")]
+        public async Task<ActionResult> StartTask(long Id) => Ok(await _manager.HandleStatus(Id));
+        [HttpPost("Task/end/{Id:long}")]
+        public async Task<ActionResult> EndTask(long Id) => Ok(await _manager.HandleStatus(Id,false));
 
     }
 

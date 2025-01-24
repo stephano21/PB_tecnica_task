@@ -14,13 +14,17 @@ namespace Tasks.Entities
         public string Description { get; set; }
         [ForeignKey("Profile")]
         public string UserId { get; set; }
+        public Status Status { get; set; } = Status.Nuevo;
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         //[JsonIgnore]
         public virtual Profile Profile { get; set; }
 
-        public void UpdateTask(TaskDTO data)
+        public void UpdateTask(ItemTaskDTO data)
         {
             Title = data.Title;
             Description = data.Description;
         }
     }
+   
 }

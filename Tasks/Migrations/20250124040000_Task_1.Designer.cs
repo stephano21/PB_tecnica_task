@@ -12,8 +12,8 @@ using Tasks;
 namespace Tasks.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250123212352_task_01")]
-    partial class task_01
+    [Migration("20250124040000_Task_1")]
+    partial class Task_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -268,16 +268,23 @@ namespace Tasks.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeleteIP")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("DeleteUser")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -287,11 +294,9 @@ namespace Tasks.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UpdateIP")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("UpdateUser")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("UserId")

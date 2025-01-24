@@ -7,11 +7,11 @@
         public string CreateUser { get; set; } = null;
         public string CreateIP { get; set; } = null;
         public DateTime? UpdateAt { get; set; }
-        public string UpdateUser { get; set; } = null;
-        public string UpdateIP { get; set; } = null;
+        public string? UpdateUser { get; set; } = null;
+        public string? UpdateIP { get; set; } = null;
         public DateTime? DeleteAt { get; set; }
-        public string DeleteUser { get; set; } = null;
-        public string DeleteIP { get; set; } = null;
+        public string? DeleteUser { get; set; } = null;
+        public string? DeleteIP { get; set; } = null;
         public void Register(string username, string ip)
         {
             Active = true;
