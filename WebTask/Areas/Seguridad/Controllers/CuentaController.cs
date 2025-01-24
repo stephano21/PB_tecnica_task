@@ -31,7 +31,7 @@ namespace WebTask.Web.Areas.Seguridad.Controllers
             var authenticated = false; //TODO: Implementar logica de validar token
             if (authenticated)
             {
-                return Redirect("../../../");
+                return Redirect("/");
             }
 
             return View();
@@ -44,7 +44,7 @@ namespace WebTask.Web.Areas.Seguridad.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var response = await _restClientHelper.PostRequestAsync<LoggedUser>("/api/auth/login", null, model);
+                    var response = await _restClientHelper.PostRequestAsync<LoggedUser>("/auth/login", null, model);
 
                     if (response != null)
                     {

@@ -1,53 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using RestSharp;
+using RestSharp.Serializers.Json;
+using System.Text.Json;
 
 namespace WebTask.Web.Servicios
 {
     public class RestClientHelper
     {
         private readonly IConfiguration _configuration;
-        private readonly HttpClient _httpClient;
+        private readonly RestClient _restClient;
 
         public RestClientHelper(IConfiguration configuration)
         {
             _configuration = configuration;
-            _httpClient = new HttpClient
+
+            // Configura el cliente RestSharp
+            var options = new RestClientOptions(_configuration["APIClient"])
             {
-                BaseAddress = new Uri(_configuration["APIClient"])
+                ThrowOnAnyError = true,
+                MaxTimeout = 120000 // Timeout en milisegundos
             };
+
+            _restClient = new RestClient(options, configureSerialization: s => s.UseSystemTextJson(new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = null // Mantener PascalCase
+            }));
         }
 
         public async Task<(byte[] fileData, string fileName)> GetBinaryRequestAsync(string endPoint, string token = null, Dictionary<string, string> queryParams = null)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, endPoint);
+            var request = new RestRequest(endPoint, Method.Get);
 
             if (token != null)
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                request.AddHeader("Authorization", $"Bearer {token}");
             }
 
             if (queryParams != null)
             {
-                var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
-                request.RequestUri = new Uri($"{request.RequestUri}?{queryString}");
+                foreach (var param in queryParams)
+                {
+                    request.AddQueryParameter(param.Key, param.Value);
+                }
             }
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await _restClient.ExecuteAsync(request);
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessful)
             {
-                var contentDisposition = response.Content.Headers.ContentDisposition;
-                string fileName = contentDisposition?.FileName;
+                var contentDisposition = response.ContentHeaders.FirstOrDefault(h => h.Name == "Content-Disposition")?.Value?.ToString();
+                string fileName = contentDisposition?.Split("filename=")[1].Trim('"');
 
-                var fileData = await response.Content.ReadAsByteArrayAsync();
-                return (fileData, fileName);
+                return (response.RawBytes, fileName);
             }
             else
             {
@@ -58,25 +66,26 @@ namespace WebTask.Web.Servicios
 
         public async Task<T> GetRequestAsync<T>(string endPoint, string token = null, Dictionary<string, string> queryParams = null)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, endPoint);
+            var request = new RestRequest(endPoint, Method.Get);
 
             if (token != null)
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                request.AddHeader("Authorization", $"Bearer {token}");
             }
 
             if (queryParams != null)
             {
-                var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
-                request.RequestUri = new Uri($"{request.RequestUri}?{queryString}");
+                foreach (var param in queryParams)
+                {
+                    request.AddQueryParameter(param.Key, param.Value);
+                }
             }
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await _restClient.ExecuteAsync<T>(request);
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessful)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<T>(content);
+                return response.Data;
             }
             else
             {
@@ -87,31 +96,31 @@ namespace WebTask.Web.Servicios
 
         public async Task<T> PostRequestAsync<T>(string endPoint, string token = null, object payload = null, Dictionary<string, string> queryParams = null)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, endPoint);
+            var request = new RestRequest(endPoint, Method.Post);
 
             if (token != null)
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                request.AddHeader("Authorization", $"Bearer {token}");
             }
 
             if (queryParams != null)
             {
-                var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
-                request.RequestUri = new Uri($"{request.RequestUri}?{queryString}");
+                foreach (var param in queryParams)
+                {
+                    request.AddQueryParameter(param.Key, param.Value);
+                }
             }
 
             if (payload != null)
             {
-                var jsonContent = JsonSerializer.Serialize(payload);
-                request.Content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
+                request.AddJsonBody(payload);
             }
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await _restClient.ExecuteAsync<T>(request);
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessful)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<T>(content);
+                return response.Data;
             }
             else
             {
@@ -122,31 +131,31 @@ namespace WebTask.Web.Servicios
 
         public async Task<List<T>> ListPostRequestAsync<T>(string endPoint, string token = null, object payload = null, Dictionary<string, string> queryParams = null)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, endPoint);
+            var request = new RestRequest(endPoint, Method.Post);
 
             if (token != null)
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                request.AddHeader("Authorization", $"Bearer {token}");
             }
 
             if (queryParams != null)
             {
-                var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
-                request.RequestUri = new Uri($"{request.RequestUri}?{queryString}");
+                foreach (var param in queryParams)
+                {
+                    request.AddQueryParameter(param.Key, param.Value);
+                }
             }
 
             if (payload != null)
             {
-                var jsonContent = JsonSerializer.Serialize(payload);
-                request.Content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
+                request.AddJsonBody(payload);
             }
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await _restClient.ExecuteAsync<List<T>>(request);
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessful)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<T>>(content);
+                return response.Data;
             }
             else
             {

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Commons
 {
@@ -35,16 +36,24 @@ namespace Commons
     }
     public class LoggedUser
     {
+        [JsonPropertyName("auth")]
         public TokensDTO Auth { get; set; }
+        [JsonPropertyName("username")]
         public string Username { get; set; }
+        [JsonPropertyName("fullName")]
         public string FullName { get; set; }
+        [JsonPropertyName("role")]
         public string Role { get; set; }
+        [JsonPropertyName("expiracion")]
         public DateTime Expiracion { get; set; }
+        [JsonPropertyName("env")]
         public string Env { get; set; }
     }
     public class TokensDTO
     {
+        [JsonPropertyName("access_Token")]
         public string Access_Token { get; set; }
+        [JsonPropertyName("refresh_Token")]
         public string Refresh_Token { get; set; }
     }
     public class ProfileViewDTO: ProfileDTO
