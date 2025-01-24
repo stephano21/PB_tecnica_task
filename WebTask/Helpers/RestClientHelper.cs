@@ -163,5 +163,69 @@ namespace WebTask.Web.Servicios
                 return default;
             }
         }
+        public async Task<T> PutRequestAsync<T>(string endPoint, string token = null, object payload = null, Dictionary<string, string> queryParams = null)
+        {
+            var request = new RestRequest(endPoint, Method.Put);
+
+            if (token != null)
+            {
+                request.AddHeader("Authorization", $"Bearer {token}");
+            }
+
+            if (queryParams != null)
+            {
+                foreach (var param in queryParams)
+                {
+                    request.AddQueryParameter(param.Key, param.Value);
+                }
+            }
+
+            if (payload != null)
+            {
+                request.AddJsonBody(payload);
+            }
+
+            var response = await _restClient.ExecuteAsync<T>(request);
+
+            if (response.IsSuccessful)
+            {
+                return response.Data;
+            }
+            else
+            {
+                Console.WriteLine($"La solicitud falló con el código: {response.StatusCode}");
+                return default;
+            }
+        }
+
+        public async Task<bool> DeleteRequestAsync(string endPoint, string token = null, Dictionary<string, string> queryParams = null)
+        {
+            var request = new RestRequest(endPoint, Method.Delete);
+
+            if (token != null)
+            {
+                request.AddHeader("Authorization", $"Bearer {token}");
+            }
+
+            if (queryParams != null)
+            {
+                foreach (var param in queryParams)
+                {
+                    request.AddQueryParameter(param.Key, param.Value);
+                }
+            }
+
+            var response = await _restClient.ExecuteAsync(request);
+
+            if (response.IsSuccessful)
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine($"La solicitud falló con el código: {response.StatusCode}");
+                return false;
+            }
+        }
     }
 }

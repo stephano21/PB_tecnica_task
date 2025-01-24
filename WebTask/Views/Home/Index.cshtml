@@ -2,6 +2,14 @@
 @model TaskDTO;
 @{
     ViewData["Title"] = "Tareas";
+    static string GetColor(Status estado) =>
+    estado switch
+    {
+        Status.Nuevo => "ui green label",
+        Status.EnProceso => "ui orange label",
+        Status.Terminado => "ui red label",
+        _ => "ui grey label"
+    };
 }
 
 <div class="ui container">
@@ -22,7 +30,7 @@
             <tr>
                 <th>Título</th>
                 <th>Descripción</th>
-                <th>Completada</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -31,10 +39,11 @@
             {
                 foreach (var task in Model.Items)
                 {
+                    var Color = GetColor(task.status);
                     <tr>
                         <td>@task.Title</td>
                         <td>@task.Description</td>
-                        <td>@task.status.ToString()</td>
+                        <td><a class="@Color">@task.status.ToString()</a></td>
                         <td>
                             <a href="@Url.Action("Edit", new { id = task.Id })" class="ui button">Editar</a>
                             <form asp-action="Delete" method="post" style="display:inline;">
@@ -49,3 +58,34 @@
         </tbody>
     </table>
 </div>
+<div class="ui mini modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Profile Picture
+    </div>
+    <div class="image content">
+        <div class="ui medium image">
+            <img src="/images/avatar/large/chris.jpg">
+        </div>
+        <div class="description">
+            <div class="ui header">We've auto-chosen a profile image for you.</div>
+            <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
+            <p>Is it okay to use this photo?</p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            Nope
+        </div>
+        <div class="ui positive right labeled icon button">
+            Yep, that's me
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<script>
+        $('.mini.modal')
+      .modal('show')
+    ;
+</script>

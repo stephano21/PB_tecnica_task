@@ -60,8 +60,9 @@ namespace WebTask.Web.Decorators
                 }
                 catch (Exception ex)
                 {
+                    return;
                     // Manejar el error...
-                    throw new Exception("Error al validar el token", ex);
+                    //throw new Exception("Error al validar el token", ex);
                 }
             }
         }

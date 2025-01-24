@@ -8,39 +8,67 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js" integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebTask</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="ui container">
+        <div class="ui secondary  menu">
+            <a class="active item">
+                Home
+            </a>
+
+            <div class="right menu">
+                <div class="item">
+                    <div class="ui icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search link icon"></i>
+                    </div>
                 </div>
+                <a class="ui item" onclick="redirectToLogin()">
+                    Logout
+                </a>
             </div>
-        </nav>
-    </header>
-    <div class="container">
+        </div>
+
+    </div>
+    <div class="ui container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - WebTask - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.all.min.js"></script>
+    <script>
+         $(document).ready(function () {
+         var merror = '@TempData["MensajeError"]';
+            if (merror != '') {
+                Swal.fire({
+                    title: 'Ocurrió un error!',
+                    icon: 'error',
+                    html: `@Html.Raw(TempData["MensajeError"])`
+                })
+            }
+
+            var msuccess = '@TempData["MensajeExito"]';
+            if (msuccess != '') {
+                Swal.fire({
+                    title: 'Transacción exitosa!',
+                    icon: 'success',
+                    html: '@Html.Raw(TempData["MensajeExito"])'
+                })
+            }
+
+            var minfo = '@TempData["MensajeInfo"]';
+            if (minfo != '') {
+                Swal.fire({
+                    title: 'Información ConauTec',
+                    icon: 'info',
+                    html: '@Html.Raw(TempData["MensajeInfo"])'
+                })
+            }
+             });
+         function redirectToLogin() {
+            window.location.href = "/Areas/Seguridad/Cuenta/CerrarSession";
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
