@@ -1,0 +1,25 @@
+2025-01-24 00:38:18.092 -05:00 [ERR] 
+
+----------------------------ERROR-Tasks.Controllers.AuthController.LoginAsync (Tasks)----------------------------------
+Request ID: 00-15c5f90339e1687ed7e77967097ec22d-c68add4256c29d12-00
+Request TraceIdentifier: 40000072-0004-fa00-b63f-84710c7967bb
+Date: 24/1/2025 0:38:17
+Controller: Auth
+Endpoint: Tasks.Controllers.AuthController.LoginAsync (Tasks)
+Message: Usuario no encontrado!
+StackTrace:    at Tasks.Manager.CustomUserIdentityManager.LoginUserAsync(LoginDTO credencialesUsuario) in C:\PROYECTO\Task_Repov2\Tasks\Manager\CustomUserIdentityManager.cs:line 101
+   at Tasks.Controllers.AuthController.LoginAsync(LoginDTO data) in C:\PROYECTO\Task_Repov2\Tasks\Controllers\AuthController.cs:line 23
+   at lambda_method215(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextExceptionFilterAsync>g__Awaited|26_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+Usuario: 
+InnerException: 
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+
