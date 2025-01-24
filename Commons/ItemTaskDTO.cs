@@ -1,5 +1,9 @@
 ﻿namespace Commons
 {
+    public class TaskDTO
+    {
+        public List<ItemTaskDTO> Items { get; set; }= new List<ItemTaskDTO>();
+    }
     public class ItemTaskDTO: CreateTask
     {
         public long Id { get; set; }

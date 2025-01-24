@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebTask.Models;
+using WebTask.Web.Decorators;
 
 namespace WebTask.Controllers
 {
+    [TokenRequired]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

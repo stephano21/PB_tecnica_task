@@ -4,10 +4,10 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Net;
 using System.Threading.Tasks;
-using ConautoDT.Web.Servicios;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Commons;
+using WebTask.Web.Servicios;
 
 namespace WebTask.Web.Areas.Seguridad.Controllers
 {
@@ -18,10 +18,10 @@ namespace WebTask.Web.Areas.Seguridad.Controllers
         private readonly IConfiguration _configuration;
         private readonly IMemoryCache _memoryCache;
 
-        public CuentaController(IConfiguration configuration, IMemoryCache memoryCache, RestClientHelper restClientHelper)
+        public CuentaController(IConfiguration configuration, IMemoryCache memoryCache)
         {
             _configuration = configuration;
-            _restClientHelper = restClientHelper;
+            _restClientHelper = new RestClientHelper(configuration);
             _memoryCache = memoryCache;
         }
 
@@ -44,7 +44,7 @@ namespace WebTask.Web.Areas.Seguridad.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var response = await _restClientHelper.PostRequestAsync<LoggedUser>("/auth/login", null, model);
+                    var response = await _restClientHelper.PostRequestAsync<LoggedUser>("/api/auth/login", null, model);
 
                     if (response != null)
                     {

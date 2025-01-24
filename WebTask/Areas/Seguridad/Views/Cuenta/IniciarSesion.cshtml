@@ -1,94 +1,214 @@
-﻿@using Commons
-@model LoginDTO
-@{
-    ViewData["Title"] = "Iniciar sesión";   
-}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
-</head>
-<body>
-    <div class="container d-flex justify-content-center" style="height: 100vh;">
-        <div class="row align-items-center justify-content-center" style="width: 100%;">
-            <div class="col-lg-5 col-md-8 col-sm-12">
-                <div class="card shadow-lg mb-5 bg-body-tertiary rounded1 border border-0">
-                    <div class="text-center title">
-                        <div>
-                            <img src="~/imagenes/serviciotecnicoconauto.png" class="mt-2" height="100" width="200" />
-                        </div>
-                        <p class="mb-4 mt-2">Inicia sesión</p>
-                    </div>
-                    @using (Html.BeginForm("IniciarSesion", "Cuenta", FormMethod.Post, new { @class = "ui inverted form" }))
-                    {
-                        
+﻿﻿@using Commons
 
-                        <div class="mb-2">
-                            <div class="form-group">
-                                <label class="form-label">Correo</label>
-                                @Html.TextBoxFor(model => model.Username, new { @class = "form-control", @placeholder= "Correo" })
-                                @Html.ValidationMessageFor(model => model.Username, null, new { @class = "error-text text-danger" })
-                            </div>
-                        </div>
-                        <div>
-                            <div class="form-group">
-                                <label class="form-label">Contraseña</label>
-                                @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder= "Contraseña" })
-                                @Html.ValidationMessageFor(model => model.Password, null, new { @class = "error-text text-danger" })
-                            </div>
-                            <div class="form-group">
-                                <input type="checkbox" id="checkpass" class="mt-2" onclick="showPassword('Password')">
-                                <label for="checkpass">Mostrar contraseña</label>
-                            </div>
-                        </div>
-                        <button class="btn text-white" type="submit">Iniciar sesión</button>
-                    }
+@model LoginDTO
+
+@{
+    ViewBag.Title = "Iniciar Sesión";
+}
+
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: aliceblue;
+        background-size: 100px 100px;
+        font-family: Arial, sans-serif;
+    }
+
+    .login-container {
+        display: flex;
+        width: 90%;
+        max-width: 900px;
+        border-radius: 20px;
+        overflow: hidden;
+        /*    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);*/
+    }
+
+
+    /* Left side style */
+    .welcome-section {
+        flex: 1;
+        background-color: #2343f5;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+        position: relative;
+    }
+
+        .welcome-section .design-element {
+            position: absolute;
+            top: -20px;
+            right: -30px;
+            width: 80px;
+            height: 80px;
+            background-color: #fff3e0;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .welcome-section h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .welcome-section .design-element {
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            width: 80px;
+            height: 80px;
+            background-color: #ffebcc;
+            border-radius: 50%;
+            opacity: 0.5;
+            z-index: 1;
+        }
+
+        .welcome-section img.icon-image {
+            width: 120px;
+            position: absolute;
+            top: 20%;
+            right: -60px;
+            transform: rotate(-20deg);
+            z-index: 2;
+        }
+
+
+    /* Right side style */
+    .login-section {
+        flex: 1;
+        padding: 40px;
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+        .login-section h2 {
+            color: #003de6;
+            margin-bottom: 15px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+    .ui.form .field label {
+        color: #333;
+        font-weight: 600;
+    }
+
+    .ui.form .input input {
+        background-color: #f9f9f9;
+    }
+
+    .login-section .ui.primary.button {
+        width: 100%;
+        background-color: #1c72f2;
+        color: white;
+    }
+
+        .login-section .ui.primary.button:hover {
+            background-color: #003de6;
+        }
+
+    .login-section .links {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 12px;
+        color: #555;
+    }
+
+        .login-section .links a {
+            color: #2a1cf2;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+    .password-toggle {
+        position: absolute;
+        right: 10px;
+        cursor: pointer;
+        font-size: 1.2em;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+</style>
+<!-- Semantic UI JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css" integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js" integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<body>
+    <div class="login-container">
+        <!-- Left Side - Branding and Illustration -->
+        <div class="welcome-section">
+            <h1>Stephano Chang</h1>
+            <p>Task</p>
+
+        </div>
+
+        <!-- Right Side - Login Form -->
+        <div class="login-section">
+            <h2>Sistem Task</h2>
+            @using (Html.BeginForm("IniciarSesion", "Cuenta", FormMethod.Post, new { @class = "ui form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="field">
+                    @Html.LabelFor(m => m.Username, "Usuario")
+                    <div class="ui left icon input">
+                        @Html.TextBoxFor(m => m.Username, new { placeholder = "Usuario" })
+                        <i class="user icon"></i>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Username)
                 </div>
-            </div>
+
+                <div class="field">
+                    @Html.LabelFor(m => m.Password, "Contraseña")
+                    <div class="ui left icon input">
+                        @Html.PasswordFor(m => m.Password, new { placeholder = "Contraseña" })
+                        <i class="lock icon"></i>
+                        <div class="password-toggle" style="position: absolute; right: 10px; cursor: pointer; font-size: 1.2em;">
+                            <i class="eye icon" id="viewPassword"></i>
+
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Password)
+                </div>
+
+
+                <button type="submit" class="ui primary button">Iniciar sesión</button>
+
+              
+            }
         </div>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.all.min.js"></script>
-    <script>
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-        
-        $(document).ready(function () {
+ 
+</body>
 
-            var merror = '@TempData["MensajeError"]';
-            
-            if (merror != '') {
-                Swal.fire({
-                    title: 'Ocurrió un error!',
-                    icon: 'error',
-                    html: '@Html.Raw(TempData["MensajeError"])'
-                })
-            }
+<script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        // Toggle password visibility
+        $("#viewPassword").click(function () {
+            // Get password input
+            const passwordInput = $("#Password");
+            // Get eye icon
+            const eyeIcon = $(this);
 
-            var msuccess = '@TempData["MensajeExito"]';
-
-            if (msuccess != '') {
-                Swal.fire({
-                    title: 'Transacción exitosa!',
-                    icon: 'success',
-                    html: '@Html.Raw(TempData["MensajeExito"])'
-                })
+            // Toggle between password and text input type
+            if (passwordInput.attr("type") === "password") {
+                passwordInput.attr("type", "text");
+                eyeIcon.removeClass("eye").addClass("eye slash");
+            } else {
+                passwordInput.attr("type", "password");
+                eyeIcon.removeClass("eye slash").addClass("eye");
             }
         });
-
-        function showPassword(id) {
-            const input = document.getElementById(id)
-            if (input.type === "password") {
-                input.type = "text";
-            } else {
-                input.type = "password";
-            }
-        }
-
-    </script>
-</body>
-</html>
+    });
+</script>

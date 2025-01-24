@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
-namespace ConautoDT.Web.Servicios
+namespace WebTask.Web.Servicios
 {
     public class RestClientHelper
     {

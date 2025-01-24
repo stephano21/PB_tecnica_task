@@ -76,7 +76,10 @@ namespace WebTask
                    name: "Logout",
                    pattern: "Areas/Seguridad/Cuenta/CerrarSession",
                    defaults: new { area = "Seguridad", controller = "Cuenta", action = "CerrarSession" });
-                
+                endpoints.MapControllerRoute(
+                   name: "Home",
+                   pattern: "/",
+                   defaults: new { controller = "Home", action = "index" });
             });
         }
     }
