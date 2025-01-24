@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using System.Text.Json.Serialization;
 using Tasks.Entities;
@@ -33,7 +35,11 @@ namespace Tasks
             {
                 //Log para captar todos los exeptions no capturados
                 opciones.Filters.Add(typeof(FilterExeption));
-            }).AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles).AddNewtonsoftJson();
+            }).AddJsonOptions(x =>
+            {
+                x.JsonSerializerOptions.PropertyNamingPolicy = null;
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            }).AddNewtonsoftJson();
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
