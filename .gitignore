@@ -1,0 +1,40 @@
+# Ignorar archivos de compilación y ejecución
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.userprefs
+*.csproj.user
+*.pidb
+*.ncrunchsolution
+*.ncrunchproject
+
+# Ignorar archivos de salida de publicación
+publish/
+app.publish/
+
+# Ignorar archivos de dependencias
+packages/
+.nuget/
+.npm/
+node_modules/
+
+# Ignorar archivos de configuración local
+appsettings.Development.json
+appsettings.Local.json
+appsettings.private.json
+
+# Ignorar archivos de logs y temporales
+*.log
+*.tmp
+*.temp
+*.cache
+*.swp
+*.swo
+# Ignorar archivos de Docker
+**/Dockerfile
+**/docker-compose.yml
+**/.dockerignore
+**/docker-compose.override.yml
