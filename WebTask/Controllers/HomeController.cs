@@ -21,7 +21,18 @@ namespace WebTask.Controllers
 
             _restClientHelper = new RestClientHelper(configuration);
         }
+        List<ItemTaskDTO> GetDataFAke()
+        {
+            return new List<ItemTaskDTO> { new ItemTaskDTO
+            {
+                Id=1,
+                Description="Prueba",
+                status = Status.EnProceso,
+                Title ="Test",
+                StartDate = DateTime.Now.AddDays(-1).AddHours(-2)
 
+            } };
+        }
         public async Task<IActionResult> Index()
         {
             var model = new TaskDTO();
@@ -30,10 +41,16 @@ namespace WebTask.Controllers
                 string token = Request.Cookies["token"];
                 var response = await _restClientHelper.GetRequestAsync<List<ItemTaskDTO>>("/Task", token);
                 model.Items.AddRange(response);
+                if (!model.Items.Any())
+                {
+                    
+                }
                 return View(model);
             }
             catch (Exception ex)
             {
+                var dataFake = GetDataFAke();
+                model.Items.AddRange(dataFake);
                 TempData["MensajeError"] = ex.Message;
                 return View(model);
 

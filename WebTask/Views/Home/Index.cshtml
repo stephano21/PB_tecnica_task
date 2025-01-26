@@ -23,7 +23,7 @@
         </div>
     }
 
-    <a href="@Url.Action("Create")" class="ui primary button">Crear Nueva Tarea</a>
+    <a id="create-btn" class="ui green button"><i class="icon save"></i></a>
 
     <table class="ui celled table">
         <thead>
@@ -43,13 +43,10 @@
                     <tr>
                         <td>@task.Title</td>
                         <td>@task.Description</td>
-                        <td><a class="@Color">@task.status.ToString()</a></td>
+                        <td><a class="@Color">@task.status.GetDescription()</a></td>
                         <td>
-                            <a href="@Url.Action("Edit", new { id = task.Id })" class="ui button">Editar</a>
-                            <form asp-action="Delete" method="post" style="display:inline;">
-                                <input type="hidden" name="id" value="@task.Id" />
-                                <button type="submit" class="ui red button">Eliminar</button>
-                            </form>
+                            <a href="@Url.Action("Edit", new { id = task.Id })" class="ui primary button"><i class="icon primary edit"></i></a>
+                            <a onclick="confirmAction('@task.Id','@task.Title')" class="ui red button"><i class="icon trash"></i></a>
                         </td>
                     </tr>
                 }
@@ -58,7 +55,7 @@
         </tbody>
     </table>
 </div>
-<div class="ui mini modal">
+<div class="ui mini modal" id="alert">
     <i class="close icon"></i>
     <div class="header">
         Profile Picture
@@ -85,7 +82,10 @@
 </div>
 
 <script>
-        $('.mini.modal')
-      .modal('show')
-    ;
+     $('.ui.modal').modal();
+    function confirmAction(id, title) {
+        //$('#alert').modal('show');
+            $('.ui.mini.modal').modal('show');
+    }
+
 </script>

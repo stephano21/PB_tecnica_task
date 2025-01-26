@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace Commons
 {
@@ -31,9 +32,24 @@ namespace Commons
     }
     public enum Status
     {
+        [Description("Nuevo")]
         Nuevo = 0,
+        [Description("Pendiente")]
         Pendiente = 1,
+        [Description("En Proceso")]
         EnProceso = 2,
+        [Description("Terminado")]
         Terminado = 3
+
+    }
+    public static class EnumExtensions
+    {
+        public static string GetDescription(this Enum value)
+        {
+            var field = value.GetType().GetField(value.ToString());
+            var attribute = field.GetCustomAttributes(typeof(DescriptionAttribute), false)
+                                 .FirstOrDefault() as DescriptionAttribute;
+            return attribute == null ? value.ToString() : attribute.Description;
+        }
     }
 }

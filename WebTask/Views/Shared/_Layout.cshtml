@@ -36,8 +36,11 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.all.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/components/modal.min.css" integrity="sha512-O+9HCSTa58q6mrPxDvnNqBc7sPkqC7ByndUgWVMa65B5Y0jRztCrdiIZAEmAee/0+oYpyjNQwj0d4qIaLbNJuQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
          $(document).ready(function () {
+                    
          var merror = '@TempData["MensajeError"]';
             if (merror != '') {
                 Swal.fire({
@@ -59,7 +62,7 @@
             var minfo = '@TempData["MensajeInfo"]';
             if (minfo != '') {
                 Swal.fire({
-                    title: 'Información ConauTec',
+                    title: 'Información',
                     icon: 'info',
                     html: '@Html.Raw(TempData["MensajeInfo"])'
                 })
