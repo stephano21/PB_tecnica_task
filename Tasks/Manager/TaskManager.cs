@@ -33,7 +33,17 @@ namespace Tasks.Manager
             EndDate = x.EndDate,
             UserId = x.UserId
         }).ToListAsync();
-
+        public async Task<ItemTaskDTO> GetById(long Id) => await _context.TaskNotes.Where(x => x.Active && x.Id==Id).Select(x => new ItemTaskDTO
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Description = x.Description,
+            status = x.Status,
+            CreateDate = x.CreateAt,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
+            UserId = x.UserId
+        }).FirstOrDefaultAsync()?? throw new Exception("Registro no encontrado!");
         public async Task<bool> Save(CreateTask data)
         {
             data.Title = data.Title.Trim();
@@ -53,7 +63,7 @@ namespace Tasks.Manager
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> Edit(ItemTaskDTO data)
+        public async Task<bool> Edit(UpdateTask data)
         {
             var duplicate = await _context.TaskNotes.Where(x => x.Active && x.Title.ToLower() == data.Title.ToLower() && x.Id != data.Id).AnyAsync();
             if (duplicate)

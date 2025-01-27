@@ -7,10 +7,9 @@ namespace Commons
     {
         public List<ItemTaskDTO> Items { get; set; }= new List<ItemTaskDTO>();
     }
-    public class ItemTaskDTO: CreateTask
+    public class ItemTaskDTO: UpdateTask
     {
-        [JsonPropertyName("id")]
-        public long Id { get; set; }
+        
         [JsonPropertyName("status")]
         public Status status { get; set; }
         [JsonPropertyName("userId")]
@@ -29,6 +28,11 @@ namespace Commons
         public string Title { get; set; }
         [JsonPropertyName("description")]
         public string Description { get; set; }
+    }
+    public class UpdateTask: CreateTask
+    {
+        [JsonPropertyName("id")]
+        public long Id { get; set; }
     }
     public enum Status
     {

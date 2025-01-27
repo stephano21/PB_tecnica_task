@@ -23,7 +23,7 @@
         </div>
     }
 
-    <a id="create-btn" class="ui green button"><i class="icon save"></i></a>
+    <a id="create-btn" class="ui green button" onclick="createOrEdit()"><i class="icon save"></i></a>
 
     <table class="ui celled table">
         <thead>
@@ -45,7 +45,7 @@
                         <td>@task.Description</td>
                         <td><a class="@Color">@task.status.GetDescription()</a></td>
                         <td>
-                            <a href="@Url.Action("Edit", new { id = task.Id })" class="ui primary button"><i class="icon primary edit"></i></a>
+                            <a onclick="createOrEdit('@task.Id',true,'@task.Title')" class="ui primary button"><i class="icon primary edit"></i></a>
                             <a onclick="confirmAction('@task.Id','@task.Title')" class="ui red button"><i class="icon trash"></i></a>
                         </td>
                     </tr>
@@ -57,35 +57,153 @@
 </div>
 <div class="ui mini modal" id="alert">
     <i class="close icon"></i>
-    <div class="header">
-        Profile Picture
+    <div class="header" id="modal-header">
     </div>
-    <div class="image content">
-        <div class="ui medium image">
-            <img src="/images/avatar/large/chris.jpg">
-        </div>
+    <div class="content">
+
         <div class="description">
-            <div class="ui header">We've auto-chosen a profile image for you.</div>
-            <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
-            <p>Is it okay to use this photo?</p>
+            Se eliminará el registro del sistema, presione si para continuar
         </div>
     </div>
     <div class="actions">
         <div class="ui black deny button">
-            Nope
+            Cancelar
         </div>
         <div class="ui positive right labeled icon button">
-            Yep, that's me
+            Si, eliminar
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+<div class="ui modal" id="modal-form">
+    <i class="close icon"></i>
+    <div class="header" id="modal-form-header">
+    </div>
+    <div class="content">
+        <div class="ui form">
+            <div class="field">
+                <div class="two fields">
+                    <label for="title">Titulo</label>
+                    <div class="field">
+                        <input id="id" hidden>
+                        <input id="title">
+                    </div>
+                    <label for="description">Descripción</label>
+                    <div class="field">
+                        <input id="description">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            Cancelar
+        </div>
+        <div class="ui positive right labeled icon button" onclick="saveOrUpdateTask()">
+            Enviar
             <i class="checkmark icon"></i>
         </div>
     </div>
 </div>
 
 <script>
+    $(document).ready(function () {
      $('.ui.modal').modal();
+    });
+
     function confirmAction(id, title) {
-        //$('#alert').modal('show');
-            $('.ui.mini.modal').modal('show');
+        let Title = "¿Esta seguro de eliminar "+title+" ?";
+        $('#modal-header').html(Title);
+            $('#alert').modal('show');
     }
+    function createOrEdit(id=null,edit=false, title=""){
+        let Title =edit? "Actualizar "+title:"Registar";
+        $('#modal-form-header').html(Title);
+            if (edit && id) {
+                 $('#id').val('');
+                 $('#id').val(id);
+                loadTaskData(id);
+                $("#modal-form").modal('show');
+            } else {
+                 $('#id').val('');
+                $('#title').val('');
+                $('#description').val('');
+                $("#modal-form").modal('show');
+            }
+    }
+    function loadTaskData(id) {
+        $.ajax({
+            url: `/GetById/${id}`,
+            method: 'GET',
+            dataType: 'json',
+            success: function (taskData) {
+                console.log(taskData);
+                $('#title').val(taskData.title);
+                $('#description').val(taskData.description);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error al cargar la tarea:", error);
+                 Swal.fire({
+                      title: 'Advertencia!',
+                      text: `No se pudo cargar la tarea. Por favor, inténtalo de nuevo.`,
+                      icon: 'error',
+                      confirmButtonText: 'Ok'
+                    })
+            }
+        });
+    }
+    function saveOrUpdateTask() {
+            const isEdit = $('#modal-form-header').text().includes("Actualizar");
+            let Metod =isEdit? 'PUT':'POST';
+            const title = $('#title').val();
+            const description = $('#description').val();
+
+            if (!title || !description) {
+                    Swal.fire({
+                      title: 'Advertencia!',
+                      text: 'Por favor, complete todos los campos.',
+                      icon: 'warning',
+                      confirmButtonText: 'Continuar'
+                    })
+            }
+            let data={
+                Title:title,
+                Description:description
+            };
+            if ($('#id').val()) {
+                data.Id=parseInt($('#id').val())||0;
+            }
+            console.log(Metod,data)
+            // Determinar si es creación o edición
+            let mensaje= isEdit?"Actualizado con éxito":"Registrado con éxito"
+             $.ajax({
+            url: `/task`,
+            method: Metod,
+            data: data,
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+                Swal.fire({
+                      title: 'Operación exitosa',
+                      text: `${mensaje}`,
+                      icon: 'success',
+                      confirmButtonText: 'Ok'
+                    })
+                    window.location.reload();
+            },
+            error: function (xhr, status, error) {
+                let Action = $("#modal-form-header").text();
+                 Swal.fire({
+                      title: 'Advertencia!',
+                      text: `Error al ${Action} la tarea`,
+                      icon: 'error',
+                      confirmButtonText: 'Ok'
+                    })
+                console.error(`Error al cargar la tarea:", ${error}`);
+            }
+        });
+        }
+
 
 </script>

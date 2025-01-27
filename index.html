@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tareas - WebTask</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/components/modal.min.css"
+         integrity="sha512-O+9HCSTa58q6mrPxDvnNqBc7sPkqC7ByndUgWVMa65B5Y0jRztCrdiIZAEmAee/0+oYpyjNQwj0d4qIaLbNJuQ=="
+         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css"
+        integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <script type="text/javascript"
+        src="https://gc.kes.v2.scr.kaspersky-labs.com/7EA5E9BB-55E1-4C31-9C21-4943DDFED2E4/main.js?attr=HNf7LkNkt7a1i17uB0qI5qedJKpUdi3quKUNveYTJuUR2hq6TMvjrlM3ZCeq-az2"
+        charset="UTF-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"
+        integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.0/dist/sweetalert2.all.min.js"></script>
+</head>
+
+<body>
+    <div b-xgnc9qzs39 class="ui container">
+        <div b-xgnc9qzs39 class="ui secondary  menu">
+            <a b-xgnc9qzs39 class="active item">
+                Home
+            </a>
+
+            <div b-xgnc9qzs39 class="right menu">
+                <div b-xgnc9qzs39 class="item">
+                    <div b-xgnc9qzs39 class="ui icon input">
+                        <input b-xgnc9qzs39 type="text" placeholder="Search...">
+                        <i b-xgnc9qzs39 class="search link icon"></i>
+                    </div>
+                </div>
+                <a b-xgnc9qzs39 class="ui item" onclick="redirectToLogin()">
+                    Logout
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <div b-xgnc9qzs39 class="ui container">
+        <main b-xgnc9qzs39 role="main" class="pb-3">
+
+            <div class="ui container">
+                <h1 class="ui header">Lista de Tareas</h1>
+
+
+                <a id="create-btn" class="ui green button"><i class="icon save"></i></a>
+
+                <table class="ui celled table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Test</td>
+                            <td>Prueba</td>
+                            <td><a class="ui orange label">En Proceso</a></td>
+                            <td>
+                                <a class="ui primary button"><i class="icon primary edit"></i></a>
+                                <a onclick="confirmAction('1','Test')" class="ui red button"><i
+                                        class="icon trash"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="ui mini modal" id="alert">
+                <i class="close icon"></i>
+                <div class="header">
+                    Profile Picture
+                </div>
+                <div class="image content">
+                    <div class="ui medium image">
+                        <img src="/images/avatar/large/chris.jpg">
+                    </div>
+                    <div class="description">
+                        <div class="ui header">We've auto-chosen a profile image for you.</div>
+                        <p>We've grabbed the following image from the <a href="https://www.gravatar.com"
+                                target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
+                        <p>Is it okay to use this photo?</p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <div class="ui black deny button">
+                        Nope
+                    </div>
+                    <div class="ui positive right labeled icon button">
+                        Yep, that's me
+                        <i class="checkmark icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                $(document).ready(function () {
+                    $('.ui.modal').modal();
+                });
+
+                function confirmAction(id, title) {
+                    //$('#alert').modal('show');
+                    $('.ui.mini.modal').modal('show');
+                }
+            </script>
+        </main>
+    </div>
+
+
+
+    <script>
+        $(document).ready(function () {
+
+            var merror = 'No se puede establecer una conexi&#xF3;n ya que el equipo de destino deneg&#xF3; expresamente dicha conexi&#xF3;n. (localhost:7128)';
+            if (merror != '') {
+                Swal.fire({
+                    title: 'Ocurrió un error!',
+                    icon: 'error',
+                    html: `No se puede establecer una conexión ya que el equipo de destino denegó expresamente dicha conexión. (localhost:7128)`
+                })
+            }
+
+            var msuccess = '';
+            if (msuccess != '') {
+                Swal.fire({
+                    title: 'Transacción exitosa!',
+                    icon: 'success',
+                    html: ''
+                })
+            }
+
+            var minfo = '';
+            if (minfo != '') {
+                Swal.fire({
+                    title: 'Información',
+                    icon: 'info',
+                    html: ''
+                })
+            }
+        });
+        function redirectToLogin() {
+            window.location.href = "/Areas/Seguridad/Cuenta/CerrarSession";
+        }
+    </script>
+
+    <!-- Visual Studio Browser Link -->
+    <script type="text/javascript" src="/_vs/browserLink" async="async" id="__browserLink_initializationData"
+        data-requestId="ee041baaba244158b44502a2b55dc363" data-requestMappingFromServer="false"
+        data-connectUrl="http://localhost:55369/560de56a524b4e1a8bd911f104685abd/browserLink"></script>
+    <!-- End Browser Link -->
+    <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+</body>
+
+</html>

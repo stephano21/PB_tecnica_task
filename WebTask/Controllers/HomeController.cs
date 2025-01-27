@@ -56,7 +56,7 @@ namespace WebTask.Controllers
 
             }
         }
-        [HttpPost]
+        [HttpPost("task")]
         public async Task<JsonResult> Create(CreateTask data)
         {
             string token = Request.Cookies["token"];
@@ -64,24 +64,25 @@ namespace WebTask.Controllers
 
             return Json(new { succes = response });
         }
-        [HttpPut]
-        public async Task<JsonResult> Update(ItemTaskDTO data)
+        [HttpPut("task")]
+        public async Task<JsonResult> Update(UpdateTask data)
         {
             string token = Request.Cookies["token"];
             var response = await _restClientHelper.PutRequestAsync<bool>("/Task", token, data);
             return Json(new { succes = response });
         }
+        [HttpGet("GetById/{id:long}")]
         public async Task<JsonResult> GetById(long id)
         {
             string token = Request.Cookies["token"];
-            var response = await _restClientHelper.DeleteRequestAsync($"/Task/{id}", token);
-            return Json(new { succes = response });
+            var response = await _restClientHelper.GetRequestAsync<ItemTaskDTO>($"/Task/{id}", token);
+            return Json( response);
         }
         [HttpDelete]
         public async Task<JsonResult> Delete(long id)
         {
             string token = Request.Cookies["token"];
-            var response = await _restClientHelper.GetRequestAsync<ItemTaskDTO>("/Task", token);
+            var response = await _restClientHelper.DeleteRequestAsync($"/Task/{id}", token);
             return Json(response);
         }
     }

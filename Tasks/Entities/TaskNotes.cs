@@ -20,7 +20,7 @@ namespace Tasks.Entities
         //[JsonIgnore]
         public virtual Profile Profile { get; set; }
 
-        public void UpdateTask(ItemTaskDTO data)
+        public void UpdateTask(UpdateTask data)
         {
             Title = data.Title;
             Description = data.Description;
